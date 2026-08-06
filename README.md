@@ -7,6 +7,7 @@ CRM en formato Kanban para prospectar bares, restaurantes y similares, pensado p
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS
 - SQLite + Prisma como base de datos local
 - `@composio/core` para Google Maps, Gmail y Google Sheets
+- `@anthropic-ai/sdk` (Claude) para el asistente de chat
 
 ## Puesta en marcha (local)
 
@@ -26,7 +27,10 @@ CRM en formato Kanban para prospectar bares, restaurantes y similares, pensado p
    DATABASE_URL="file:./dev.db"
    COMPOSIO_API_KEY="tu-api-key"
    COMPOSIO_USER_ID="default"
+   ANTHROPIC_API_KEY="tu-api-key-de-anthropic"
    ```
+
+   `ANTHROPIC_API_KEY` es opcional — sin ella la app funciona igual, pero el botón "Asistente" no va a poder responder. Se saca de [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys).
 
    `DATABASE_URL` también tiene que estar en un archivo `.env` (Prisma CLI no lee `.env.local`); ya viene creado.
 
@@ -53,6 +57,7 @@ CRM en formato Kanban para prospectar bares, restaurantes y similares, pensado p
 - **Buscar prospectos**: elegí rubro (bar, restaurante, cafetería...) y zona, la app trae los negocios desde Google Maps y los agrega como leads nuevos en la columna "Nuevo".
 - **Pipeline**: arrastrá las tarjetas entre columnas (Nuevo → Primer contacto → ... → Cualificado → Ganado/Perdido) para reflejar el estado real de cada conversación.
 - **Ficha del lead**: click en "Ver ficha" para ver el detalle, cambiar etapa/prioridad, agregar notas, llamar/escribir WhatsApp, mandar el email de prospección por Gmail o sincronizar ese lead a Google Sheets.
+- **Asistente**: botón arriba a la derecha, abre un chat con Claude que puede buscar y agregar prospectos, listar leads, cambiar su etapa, mandar emails y sincronizar a Sheets por vos — usa las mismas herramientas de Composio, y el tablero se refresca solo después de cada acción.
 
 ## Nota sobre las acciones de Composio
 

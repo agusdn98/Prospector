@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { createManualLead } from "@/lib/leads";
 
 export async function GET() {
   const leads = await prisma.lead.findMany({ orderBy: { createdAt: "desc" } });
@@ -37,22 +38,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ created, skipped }, { status: 201 });
   }
 
-  const lead = await prisma.lead.create({
-    data: {
-      name: String(body.name ?? ""),
-      business: String(body.business ?? ""),
-      category: body.category ?? null,
-      address: body.address ?? null,
-      city: body.city ?? null,
-      phone: body.phone ?? null,
-      whatsapp: body.whatsapp ?? null,
-      email: body.email ?? null,
-      website: body.website ?? null,
-      priority: body.priority ?? "MEDIA",
-      owner: body.owner ?? undefined,
-      notes: body.notes ?? null,
-      source: "manual",
-    },
-  });
+  const lead = await createManualLead(body);
   return NextResponse.json(lead, { status: 201 });
 }
