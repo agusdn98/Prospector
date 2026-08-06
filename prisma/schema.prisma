@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Stage {
+  NUEVO
+  PRIMER_CONTACTO
+  SEGUNDO_CONTACTO
+  TERCER_CONTACTO
+  CUALIFICADO
+  GANADO
+  PERDIDO
+}
+
+enum Priority {
+  BAJA
+  MEDIA
+  ALTA
+}
+
+model Lead {
+  id            String   @id @default(cuid())
+  name          String
+  business      String
+  category      String?
+  address       String?
+  city          String?
+  phone         String?
+  whatsapp      String?
+  email         String?
+  website       String?
+  googleMapsUrl String?
+  placeId       String?  @unique
+  rating        Float?
+  stage         Stage    @default(NUEVO)
+  priority      Priority @default(MEDIA)
+  channel       String   @default("Google Maps")
+  owner         String   @default("Agustin Di Narbaiz")
+  potentialMin  Int?
+  potentialMax  Int?
+  notes         String?
+  source        String   @default("prospeccion")
+  lastContactAt DateTime?
+  syncedToSheet Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  activities Activity[]
+
+  @@index([stage])
+}
+
+model Settings {
+  id           String @id @default("singleton")
+  sheetId      String?
+  sheetName    String @default("Leads")
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  type      String
+  note      String?
+  createdAt DateTime @default(now())
+}
