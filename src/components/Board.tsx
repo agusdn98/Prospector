@@ -9,6 +9,7 @@ import Column from "./Column";
 import FilterBar, { EMPTY_FILTERS, Filters } from "./FilterBar";
 import SearchModal from "./SearchModal";
 import LeadDrawer from "./LeadDrawer";
+import ChatPanel from "./ChatPanel";
 
 export default function Board() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function Board() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
 
   async function loadLeads() {
@@ -70,9 +72,18 @@ export default function Board() {
           <h1 className="text-xl font-bold text-gray-900">Prospector · SnapTable</h1>
           <p className="text-sm text-gray-500">Pipeline de prospección de bares y restaurantes</p>
         </div>
-        <Link href="/conexiones" className="text-sm font-medium text-gray-500 hover:text-gray-800">
-          Conexiones →
-        </Link>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setChatOpen(true)}
+            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-full px-4 py-2"
+          >
+            <ChatIcon />
+            Asistente
+          </button>
+          <Link href="/conexiones" className="text-sm font-medium text-gray-500 hover:text-gray-800">
+            Conexiones →
+          </Link>
+        </div>
       </div>
 
       <FilterBar
@@ -113,6 +124,15 @@ export default function Board() {
           onUpdated={loadLeads}
         />
       )}
+      {chatOpen && <ChatPanel onClose={() => setChatOpen(false)} onUpdated={loadLeads} />}
     </div>
+  );
+}
+
+function ChatIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
   );
 }
