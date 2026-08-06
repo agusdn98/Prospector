@@ -116,6 +116,7 @@ export async function executeAgentTool(name: string, input: Record<string, unkno
         priority: l.priority,
         phone: l.phone,
         email: l.email,
+        rating: l.rating,
       }));
     }
     case "actualizar_lead": {
